@@ -20,4 +20,8 @@ bindActionCreators - a redux method that allows action creators to store within 
 
 Cookies - string names that map string values stored on the browser. Allows applications to keep a local history of data on a browser
 
+<<<<<<< HEAD
 How about testing yourself by extending this application with a challenge or two?
+=======
+How about testing yourself by extending this application with a challenge or two?
+>>>>>>> 14eda8672a3520e3fb20765ba2f2c81eb3b1f98d
