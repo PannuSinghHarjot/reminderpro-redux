@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //import { bindActionCreators } from 'redux';
-import { addReminder, deleteReminder } from '../actions';
+import { addReminder, deleteReminder, clearReminders } from '../actions';
+import moment from 'moment';
 
 
 class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-            text: ''         
+            text: '',
+            dueDate:''         
         }
         //addReminder: this.addReminder.bind(this);
     
@@ -16,12 +18,14 @@ class App extends Component {
 
     addReminder(){
        // console.log('this', this);
-        this.props.addReminder(this.state.text);
+       console.log('this.state.dueDate', this.state.dueDate);
+       this.props.addReminder(this.state.text, this.state.dueDate);
     }
 
     deleteReminder(id){
-        console.log('deleting in application', id);
-        console.log('this.props', this.props);
+        //console.log('deleting in application', id);
+        //console.log('this.props', this.props);
+        this.props.deleteReminder(id);
     }
 
     renderReminders(){
@@ -35,14 +39,17 @@ class App extends Component {
                     reminders.map(reminder => {
                 return(
                         <li key={reminder.id} className="list-group-item">
-                            <div className="list=item">{reminder.text} 
+                            <div className="list=item">
+                                <div>{reminder.text} </div>
+                                <div> <em>{ moment(new Date(reminder.dueDate)).fromNow()} </em></div>
+                            </div>
                             <div 
                             className="list-item delete-button"
                             onClick={ () => this.deleteReminder(reminder.id) }
                             > 
-                                &#x2715;
+                                &#2676; 
                             </div>
-                            </div>
+                            
                         </li>
                         )
                     })
@@ -54,27 +61,45 @@ class App extends Component {
     render(){
         //console.log('this.props', this.props);
         return (
-            <div className="App"> 
+            <div className="App">
+              <div >
+                <span className="waheguru"><h3> &#2676;</h3> </span>	
+                </div> 
                 <div className="title">
-                    Reminder Pro
+                    Reminder Pro 
                 </div>
+              
                 <div className="form-inline reminder-form">
                     <div className="form-group">
                         <input className="form-control" 
                                 placeholder="I have to..."
                                 onChange={event => this.setState({text: event.target.value})}
                              />
-                             
+                        <input 
+                            className="form-control"
+                            type="datetime-local"
+                            onChange={event => this.setState({dueDate: event.target.value})}
+
+                        />
+                   </div>    
                         <button 
                             type="button"
                             className="btn btn-success"
                             onClick={() => this.addReminder()}
                             >
                                 Add Reminder
-                        </button>      
-                    </div>  
+                        </button>   
+                        {this.renderReminders()}
+
+                    <div
+                        className="btn btn-danger"
+                        onClick={() => this.props.clearReminders()}
+                    >
+                            Clear Reminders
+                    </div>   
+                   
                 </div>
-                {this.renderReminders()}
+              
             </div>
         )
     }
@@ -91,4 +116,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { addReminder, deleteReminder })(App);
+export default connect(mapStateToProps, { addReminder, deleteReminder, clearReminders })(App);
